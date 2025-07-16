@@ -1,5 +1,5 @@
 # Executive Coaching Platform - Render Blueprint Configuration
-# Updated: Fixed deployment issues
+# Updated: Using external Redis or in-memory cache
 services:
   # Backend API Service
   - type: web
@@ -18,7 +18,7 @@ services:
           name: coaching-db
           property: connectionString
       - key: REDIS_URL
-        value: redis://red-abc123.render.com:6379  # Will be updated after Redis addon is created
+        sync: false  # Optional - set if using external Redis
       - key: JWT_SECRET
         generateValue: true
       - key: OPENAI_API_KEY
@@ -63,7 +63,7 @@ services:
       - key: PINECONE_API_KEY
         sync: false
       - key: REDIS_URL
-        value: redis://red-abc123.render.com:6379  # Will be updated after Redis addon is created
+        sync: false  # Optional - set if using external Redis
     healthCheckPath: /health
 
 databases:
