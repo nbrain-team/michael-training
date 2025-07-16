@@ -6,7 +6,7 @@ services:
     name: coaching-backend
     env: node
     repo: https://github.com/nbrain-team/michael-training
-    buildCommand: cd backend && npm install && npm run build
+    buildCommand: cd backend && npm install --production=false && npm run build
     startCommand: cd backend && npm start
     envVars:
       - key: NODE_ENV
@@ -51,7 +51,7 @@ services:
     name: coaching-ai-engine
     env: node
     repo: https://github.com/nbrain-team/michael-training
-    buildCommand: cd ai-engine && npm install && npm run build
+    buildCommand: cd ai-engine && npm install --production=false && npm run build
     startCommand: cd ai-engine && npm start
     envVars:
       - key: NODE_ENV
