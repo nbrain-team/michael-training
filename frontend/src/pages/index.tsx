@@ -9,6 +9,13 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const HomePage: React.FC = () => {
   const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+  React.useEffect(() => {
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
 
   const features = [
     {
@@ -66,43 +73,67 @@ const HomePage: React.FC = () => {
             >
               Harness the power of AI to accelerate your business growth with personalized coaching designed for C-suite executives.
             </Typography>
-            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-              <Button
-                variant="contained"
-                size="large"
-                onClick={() => router.push('/signup')}
-                sx={{
-                  bgcolor: 'white',
-                  color: 'primary.main',
-                  px: 4,
-                  py: 1.5,
-                  fontSize: '1.1rem',
-                  '&:hover': {
-                    bgcolor: 'grey.100'
-                  }
-                }}
-              >
-                Start Free Trial
-              </Button>
-              <Button
-                variant="outlined"
-                size="large"
-                onClick={() => router.push('/demo')}
-                sx={{
-                  borderColor: 'white',
-                  color: 'white',
-                  px: 4,
-                  py: 1.5,
-                  fontSize: '1.1rem',
-                  '&:hover': {
-                    borderColor: 'white',
-                    bgcolor: 'rgba(255,255,255,0.1)'
-                  }
-                }}
-              >
-                Watch Demo
-              </Button>
-            </Box>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              <Box sx={{ mt: 4, display: 'flex', gap: 2, justifyContent: 'center' }}>
+                {isLoggedIn ? (
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={() => router.push('/dashboard')}
+                    sx={{
+                      py: 2,
+                      px: 4,
+                      borderRadius: 2,
+                      textTransform: 'none',
+                      fontSize: '1.1rem'
+                    }}
+                  >
+                    Go to Dashboard
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      onClick={() => router.push('/signup')}
+                      sx={{
+                        py: 2,
+                        px: 4,
+                        borderRadius: 2,
+                        textTransform: 'none',
+                        fontSize: '1.1rem'
+                      }}
+                    >
+                      Start Free Trial
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      size="large"
+                      onClick={() => router.push('/demo')}
+                      sx={{
+                        py: 2,
+                        px: 4,
+                        borderRadius: 2,
+                        textTransform: 'none',
+                        fontSize: '1.1rem',
+                        color: 'white',
+                        borderColor: 'white',
+                        '&:hover': {
+                          borderColor: 'white',
+                          bgcolor: 'rgba(255,255,255,0.1)'
+                        }
+                      }}
+                    >
+                      View Demo
+                    </Button>
+                  </>
+                )}
+              </Box>
+            </motion.div>
           </motion.div>
         </Container>
       </Box>
