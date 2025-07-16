@@ -10,7 +10,8 @@
     "test": "jest",
     "lint": "eslint src --ext .ts",
     "migrate": "prisma migrate dev",
-    "generate": "prisma generate"
+    "generate": "prisma generate",
+    "studio": "prisma studio"
   },
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.521.0",
@@ -23,9 +24,9 @@
     "express-rate-limit": "^7.2.0",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.2.0",
     "openai": "^4.28.4",
     "redis": "^4.6.13",
+    "socket.io": "^4.7.4",
     "stripe": "^14.19.0",
     "winston": "^3.11.0",
     "zod": "^3.22.4"

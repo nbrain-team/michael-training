@@ -1,0 +1,212 @@
+// This is your Prisma schema file
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  company   String
+  title     String
+  role      Role     @default(EXECUTIVE)
+  
+  // Subscription
+  subscription   Subscription?
+  
+  // Goals
+  goals          Goal[]
+  
+  // Preferences
+  preferences    UserPreferences?
+  
+  // Analytics
+  analytics      UserAnalytics?
+  
+  // Relations
+  sessions       CoachingSession[]
+  conversations  Conversation[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  EXECUTIVE
+  ADMIN
+  COACH
+}
+
+model Subscription {
+  id        String             @id @default(cuid())
+  userId    String             @unique
+  user      User               @relation(fields: [userId], references: [id])
+  plan      SubscriptionPlan   @default(FREE)
+  status    SubscriptionStatus @default(ACTIVE)
+  startDate DateTime          @default(now())
+  endDate   DateTime
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum SubscriptionPlan {
+  FREE
+  STARTER
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+}
+
+model Goal {
+  id          String     @id @default(cuid())
+  userId      String
+  user        User       @relation(fields: [userId], references: [id])
+  title       String
+  description String?
+  targetDate  DateTime
+  status      GoalStatus @default(ACTIVE)
+  progress    Int        @default(0)
+  
+  kpis        KPI[]
+  
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+enum GoalStatus {
+  ACTIVE
+  COMPLETED
+  PAUSED
+}
+
+model KPI {
+  id      String @id @default(cuid())
+  goalId  String
+  goal    Goal   @relation(fields: [goalId], references: [id])
+  name    String
+  current Float
+  target  Float
+  unit    String
+}
+
+model UserPreferences {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id])
+  communicationStyle  String?
+  focusAreas          String[]
+  timezone            String   @default("UTC")
+  emailNotifications  Boolean  @default(true)
+  pushNotifications   Boolean  @default(true)
+  smsNotifications    Boolean  @default(false)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserAnalytics {
+  id                     String   @id @default(cuid())
+  userId                 String   @unique
+  user                   User     @relation(fields: [userId], references: [id])
+  lastLogin              DateTime?
+  totalSessions          Int      @default(0)
+  averageSessionDuration Int      @default(0) // in seconds
+  questionsAsked         Int      @default(0)
+  goalsCompleted         Int      @default(0)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CoachingSession {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  startTime DateTime @default(now())
+  endTime   DateTime?
+  duration  Int?     // in seconds
+  topic     String?
+  notes     String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Conversation {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  sessionId String?
+  
+  messages  Message[]
+  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  role           MessageRole
+  content        String
+  metadata       Json?        // For storing AI-specific data
+  
+  createdAt      DateTime     @default(now())
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+// Content Management
+model Content {
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  type        ContentType
+  category    String
+  tags        String[]
+  url         String?
+  body        String?     @db.Text
+  
+  embeddings  Embedding[]
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+enum ContentType {
+  ARTICLE
+  VIDEO
+  FRAMEWORK
+  EXERCISE
+  CASE_STUDY
+}
+
+model Embedding {
+  id        String   @id @default(cuid())
+  contentId String
+  content   Content  @relation(fields: [contentId], references: [id])
+  vector    Float[]
+  metadata  Json?
+  
+  createdAt DateTime @default(now())
+} 

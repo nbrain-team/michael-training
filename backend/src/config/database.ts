@@ -1,14 +1,33 @@
-import mongoose from 'mongoose';
+import { PrismaClient } from '@prisma/client';
+import { logger } from '../utils/logger';
+
+let prisma: PrismaClient;
 
 export const connectDatabase = async (): Promise<void> => {
   try {
-    const uri = process.env.DATABASE_URL || 'mongodb://localhost:27017/coaching';
+    prisma = new PrismaClient({
+      log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    });
     
-    await mongoose.connect(uri);
+    await prisma.$connect();
     
-    console.log('✅ MongoDB connected successfully');
+    logger.info('✅ PostgreSQL connected successfully via Prisma');
   } catch (error) {
-    console.error('❌ MongoDB connection error:', error);
+    logger.error('❌ PostgreSQL connection error:', error);
     throw error;
+  }
+};
+
+export const getPrismaClient = (): PrismaClient => {
+  if (!prisma) {
+    throw new Error('Database not initialized. Call connectDatabase() first.');
+  }
+  return prisma;
+};
+
+export const disconnectDatabase = async (): Promise<void> => {
+  if (prisma) {
+    await prisma.$disconnect();
+    logger.info('PostgreSQL disconnected');
   }
 }; 
