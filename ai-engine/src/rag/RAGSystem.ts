@@ -1,5 +1,5 @@
 export class RAGSystem {
-  async retrieveContext(query: string, options: any): Promise<any> {
+  async retrieveContext(query: string, _options: any): Promise<any> {
     return {
       relevantDocuments: [],
       context: 'Placeholder context for: ' + query,

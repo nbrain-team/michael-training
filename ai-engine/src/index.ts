@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { AIOrchestrator } from './orchestrator';
 
 const app = express();
@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 8000;
 app.use(express.json());
 
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get('/health', (_req: Request, res: Response) => {
   res.json({ 
     status: 'ok', 
     service: 'ai-engine',
@@ -27,7 +27,7 @@ try {
 }
 
 // AI processing endpoint
-app.post('/api/process', async (req, res) => {
+app.post('/api/process', async (req: Request, res: Response) => {
   try {
     if (!orchestrator) {
       throw new Error('AI Orchestrator not initialized');

@@ -1,5 +1,5 @@
 export class FinancialAgent {
-  async execute(query: any): Promise<any> {
+  async execute(_query: any): Promise<any> {
     return {
       content: 'Financial agent response placeholder',
       agent: 'financial',

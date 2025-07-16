@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 const router = Router();
-router.get('/', (req, res) => res.json({ message: 'Coaching endpoint' }));
+router.get('/', (_req: Request, res: Response) => res.json({ message: 'Coaching endpoint' }));
 export default router; 

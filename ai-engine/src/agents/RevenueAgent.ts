@@ -1,5 +1,5 @@
 export class RevenueAgent {
-  async execute(query: any): Promise<any> {
+  async execute(_query: any): Promise<any> {
     return {
       content: 'Revenue agent response placeholder',
       agent: 'revenue',

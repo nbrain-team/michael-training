@@ -1,6 +1,5 @@
 import { OpenAI } from 'openai';
 import { ChatOpenAI } from '@langchain/openai';
-import { AgentExecutor } from 'langchain/agents';
 import { PromptTemplate } from '@langchain/core/prompts';
 import { logger } from '../utils/logger';
 import { RevenueAgent } from '../agents/RevenueAgent';
@@ -49,6 +48,7 @@ export class AIOrchestrator {
     });
 
     this.ragSystem = new RAGSystem();
+    this.agents = new Map();
     this.initializeAgents();
   }
 
@@ -227,7 +227,7 @@ export class AIOrchestrator {
     return Math.min(confidence, 1.0);
   }
 
-  private async getHistoricalContext(userId: string): Promise<any> {
+  private async getHistoricalContext(_userId: string): Promise<any> {
     // Retrieve user's historical interactions, preferences, and outcomes
     // This would connect to your database
     return {
