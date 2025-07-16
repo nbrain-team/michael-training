@@ -31,7 +31,23 @@ const io = new Server(httpServer, {
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Allow localhost for development
+    if (origin.includes('localhost')) return callback(null, true);
+    
+    // Allow any Render.com frontend
+    if (origin.includes('.onrender.com')) return callback(null, true);
+    
+    // Allow the specific frontend URL from env
+    const allowedOrigin = process.env.FRONTEND_URL || 'http://localhost:3000';
+    if (origin === allowedOrigin) return callback(null, true);
+    
+    // Reject other origins
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
 app.use(express.json());
