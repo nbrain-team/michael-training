@@ -33,7 +33,7 @@ router.post('/register', async (req: Request, res: Response) => {
       { expiresIn: '7d' }
     );
     
-    res.status(201).json({
+    return res.status(201).json({
       message: 'User created successfully',
       token,
       user: {
@@ -46,7 +46,7 @@ router.post('/register', async (req: Request, res: Response) => {
     });
   } catch (error) {
     logger.error('Registration error:', error);
-    res.status(500).json({ error: 'Failed to register user' });
+    return res.status(500).json({ error: 'Failed to register user' });
   }
 });
 
@@ -77,7 +77,7 @@ router.post('/login', async (req: Request, res: Response) => {
       { expiresIn: '7d' }
     );
     
-    res.json({
+    return res.json({
       message: 'Login successful',
       token,
       user: {
@@ -90,7 +90,7 @@ router.post('/login', async (req: Request, res: Response) => {
     });
   } catch (error) {
     logger.error('Login error:', error);
-    res.status(500).json({ error: 'Failed to login' });
+    return res.status(500).json({ error: 'Failed to login' });
   }
 });
 
