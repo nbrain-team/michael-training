@@ -33,7 +33,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://coaching-backend-ek6l.onrender.com'}/api/auth/login`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://coaching-backend-ek6l.onrender.com'}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

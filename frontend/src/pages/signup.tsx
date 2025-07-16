@@ -44,7 +44,7 @@ export default function SignUp() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://coaching-backend-ek6l.onrender.com'}/api/auth/register`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://coaching-backend-ek6l.onrender.com'}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
