@@ -3,7 +3,9 @@ import bcrypt from 'bcryptjs';
 import { getPrismaClient } from '../config/database';
 
 export class UserRepository {
-  private prisma = getPrismaClient();
+  private get prisma() {
+    return getPrismaClient();
+  }
 
   async create(data: {
     email: string;
