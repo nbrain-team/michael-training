@@ -1,0 +1,29 @@
+# Backend-specific Render configuration
+# Use this if deploying backend separately
+
+services:
+  - type: web
+    name: coaching-backend-api
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: DATABASE_URL
+        sync: false # Set in Render dashboard
+      - key: REDIS_URL
+        sync: false # Set in Render dashboard
+      - key: JWT_SECRET
+        generateValue: true
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: PINECONE_API_KEY
+        sync: false
+      - key: PINECONE_ENVIRONMENT
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://coaching-frontend.onrender.com 
